@@ -1,4 +1,9 @@
-export async function fetchBooks(query: string, type: string) {
+export async function fetchBooks(
+  query: string,
+  type: string,
+  page: number,
+  maxResults: number
+) {
   if (!query) {
     return null;
   }
@@ -7,7 +12,9 @@ export async function fetchBooks(query: string, type: string) {
     query = `${type}:${query}`;
   }
   const res = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`
+    `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
+      query
+    )}&startIndex=${page * maxResults}&maxResults=${maxResults}`
   );
 
   if (!res.ok) {

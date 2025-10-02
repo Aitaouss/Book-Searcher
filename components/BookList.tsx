@@ -4,19 +4,7 @@ import { BookContext } from "./BookProvider";
 import { useContext } from "react";
 import { FaBookDead } from "react-icons/fa";
 import Image from "next/image";
-
-interface bookInterface {
-  id: string;
-  volumeInfo: {
-    title: string;
-    authors?: string[];
-    imageLinks?: {
-      smallThumbnail: string;
-      thumbnail: string;
-    };
-    description?: string;
-  };
-}
+import { bookInterface } from "./BookProvider";
 
 export default function BookList() {
   const context = useContext(BookContext);
@@ -24,7 +12,7 @@ export default function BookList() {
     throw new Error("useContext must be used within a BookProvider");
   }
 
-  const { books } = context;
+  const { books, loadMore, setLoadMore } = context;
 
   if (books.length === 0) {
     return (
@@ -36,8 +24,13 @@ export default function BookList() {
       </div>
     );
   }
-  console.log(books);
   const booksToRender: bookInterface[] = books;
+
+  const handleOnclickLoadMore = () => {
+    console.log("Clicked");
+    setLoadMore(true);
+  };
+
   return (
     <div className="mt-4 grid grid-cols-1 gap-4 w-full overflow-auto flex-1 bg-foreground/10 rounded-lg">
       {booksToRender.map((book) => (
@@ -81,11 +74,14 @@ export default function BookList() {
           </div>
         </div>
       ))}
-      <div className="w-full flex justify-center">
+      <button
+        className="w-full flex justify-center"
+        onClick={handleOnclickLoadMore}
+      >
         <h1 className="cursor-pointer font-medium bg-foreground w-[20%] py-2 text-background text-center mb-4 rounded">
           Load more
         </h1>
-      </div>
+      </button>
     </div>
   );
 }
