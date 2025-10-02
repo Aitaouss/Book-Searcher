@@ -32,6 +32,7 @@ export default function SearchInbox() {
       try {
         const data = await fetchBooks(query, "intitle");
         setBooks(data?.items || []);
+        console.log(data.items);
         if (data.items?.length === 0) {
           console.log("No books found");
           return;
@@ -45,7 +46,6 @@ export default function SearchInbox() {
     };
     fetchData();
   }, [debouncedQuery]);
-
   return (
     <div className="mt-4 w-full flex items-center justify-center gap-3 h-full">
       <input
