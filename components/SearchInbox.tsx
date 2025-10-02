@@ -37,6 +37,7 @@ export default function SearchInbox() {
       try {
         const data = await fetchBooks(debouncedQuery, "intitle", 0, 10);
         setBooks(data?.items || []);
+        setPage(1); // Set to 1 so next load more will fetch page 1
 
         if (data?.items) {
           console.log("Books fetched:", data.items[0].volumeInfo.title);
@@ -60,14 +61,17 @@ export default function SearchInbox() {
   useEffect(() => {
     if (!loadMore) return; // Only run when loadMore is true
 
+    console.log("Load more effect triggered, current page:", page);
     const fetchMoreData = async () => {
       if (query.trim() === "") return;
 
       setIsSearching(true);
       try {
+        console.log("Fetching page:", page, "for query:", query);
         const data = await fetchBooks(query, "intitle", page, 10);
         setBooks((prev) => [...prev, ...(data?.items || [])]);
         setPage((prev) => prev + 1);
+        console.log("After load more, new page will be:", page + 1);
 
         if (data?.items) {
           console.log("More books fetched:", data.items[0].volumeInfo.title);
