@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
 import { BookProvider } from "../../components/BookProvider";
+import { BooksProvider } from "../../components/BooksProvider";
 import { fetchBooks } from "../../lib/fetchBooks";
 
 const inter = Inter({
@@ -35,7 +36,11 @@ export default async function RootLayout({
       <body
         className={`${inter.variable} ${nunito.variable} antialiased h-screen`}
       >
-        <BookProvider initialBooks={data?.items || []}>{children}</BookProvider>
+        <BooksProvider>
+          <BookProvider initialBooks={data?.items || []}>
+            {children}
+          </BookProvider>
+        </BooksProvider>
       </body>
     </html>
   );

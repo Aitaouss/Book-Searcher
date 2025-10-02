@@ -1,47 +1,16 @@
 "use client";
 
-import { bookInterface } from "../../../components/BookProvider";
-import { useState, useEffect } from "react";
+import { useBooks } from "../../../components/BooksProvider";
 import { FaBookDead, FaTrash, FaArrowLeft } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function FavoritesPage() {
-  const [favBooks, setFavBooks] = useState<bookInterface[]>([]);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-    const stored = window.localStorage.getItem("favorites");
-    if (stored) {
-      try {
-        setFavBooks(JSON.parse(stored));
-      } catch (error) {
-        console.error("Error parsing favorites from localStorage:", error);
-        setFavBooks([]);
-      }
-    }
-  }, []);
+  const { favBooks, removeBook } = useBooks();
 
   const handleRemoveFromFavorites = (bookId: string) => {
-    const updatedFavorites = favBooks.filter((book) => book.id !== bookId);
-    setFavBooks(updatedFavorites);
-    if (isClient) {
-      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    }
+    removeBook(bookId);
   };
-
-  if (!isClient) {
-    return (
-      <div className="h-screen flex items-center justify-center py-10 px-10">
-        <div className="w-[900px] flex h-full flex-col items-center justify-center">
-          <div className="animate-pulse text-foreground">
-            Loading favorites...
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="h-screen flex items-center justify-center py-10 px-10">

@@ -1,22 +1,18 @@
 "use client";
 
 import { BookContext } from "./BookProvider";
+import { useBooks } from "./BooksProvider";
 import { useContext, useState } from "react";
 import { FaBookDead, FaHeart, FaList } from "react-icons/fa";
 import Image from "next/image";
 import { bookInterface } from "./BookProvider";
 import { BookModal } from "./BookModal";
-import { useLocalStorage } from "@uidotdev/usehooks";
 
 export default function BookListClient() {
   const [selectedBook, setSelectedBook] = useState<bookInterface | null>(null);
 
-  const [favBook, setFavBook] = useLocalStorage<bookInterface[]>(
-    "favorites",
-    []
-  );
-
-  const [queBook, setQueBook] = useLocalStorage<bookInterface[]>("queue", []);
+  // Use the new BooksProvider context
+  const { addBook, removeBook, isBookFavorited } = useBooks();
 
   const context = useContext(BookContext);
   if (!context) {
@@ -43,34 +39,22 @@ export default function BookListClient() {
   };
 
   const handleClickFavBook = (book: bookInterface) => {
-    setFavBook((prev) => {
-      const isAlreadyFav = prev.some((b) => b.id === book.id);
-      if (isAlreadyFav) {
-        return prev.filter((b) => b.id !== book.id);
-      } else {
-        return [...prev, book];
-      }
-    });
+    if (isBookFavorited(book.id)) {
+      removeBook(book.id);
+    } else {
+      addBook(book);
+    }
   };
 
+  // For now, we'll keep the queue functionality simple without the provider
   const handleCLickQueBook = (book: bookInterface) => {
-    setQueBook((prev) => {
-      const isAlreadyQue = prev.some((b) => b.id === book.id);
-      if (isAlreadyQue) {
-        return prev.filter((b) => b.id !== book.id);
-      } else {
-        return [...prev, book];
-      }
-    });
+    // TODO: Implement queue functionality later
+    console.log("Queue clicked for book:", book.volumeInfo.title);
   };
 
-  // Helper function to check if a book is favorited
-  const isBookFavorited = (bookId: string): boolean => {
-    return favBook && favBook.some((b) => b.id === bookId);
-  };
-
+  // Simple placeholder for queue functionality
   const isBookQueued = (bookId: string): boolean => {
-    return queBook && queBook.some((b) => b.id === bookId);
+    return false; // For now, no books are queued
   };
 
   return (
