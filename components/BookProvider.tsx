@@ -24,8 +24,14 @@ export interface bookInterface {
     description?: string;
   };
 }
-export const BookProvider = ({ children }: { children: ReactNode }) => {
-  const [books, setBooks] = useState<bookInterface[]>([]);
+export const BookProvider = ({
+  children,
+  initialBooks = [],
+}: {
+  children: ReactNode;
+  initialBooks?: bookInterface[];
+}) => {
+  const [books, setBooks] = useState<bookInterface[]>(initialBooks);
   const [loadMore, setLoadMore] = useState<boolean>(false);
 
   return (

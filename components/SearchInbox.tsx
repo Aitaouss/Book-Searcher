@@ -8,7 +8,9 @@ import { BookContext } from "./BookProvider";
 export default function SearchInbox() {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [query, setQuery] = useState<string>("");
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
+  const [currentSearchQuery, setCurrentSearchQuery] = useState<string>("harry");
+  const refQuery = useRef<boolean>(true);
 
   const context = useContext(BookContext);
 
@@ -21,23 +23,27 @@ export default function SearchInbox() {
   const debouncedQuery = useDebounce<string>(query, 300);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-    setPage(0);
+    setPage(0); // Reset page when query changes
   };
 
   // Effect for new searches (when query changes)
   useEffect(() => {
+    if (refQuery.current) {
+      refQuery.current = false;
+      return;
+    }
     console.log("New search effect triggered");
     const fetchData = async () => {
       if (debouncedQuery.trim() === "") {
         setBooks([]);
-        setPage(0);
         return;
       }
       setIsSearching(true);
       try {
         const data = await fetchBooks(debouncedQuery, "intitle", 0, 10);
         setBooks(data?.items || []);
-        setPage(1); // Set to 1 so next load more will fetch page 1
+        setCurrentSearchQuery(debouncedQuery);
+        setPage(1);
 
         if (data?.items) {
           console.log("Books fetched:", data.items[0].volumeInfo.title);
@@ -59,23 +65,23 @@ export default function SearchInbox() {
 
   // Effect for load more (when loadMore flag changes)
   useEffect(() => {
-    if (!loadMore) return; // Only run when loadMore is true
+    if (!loadMore) return;
 
-    console.log("Load more effect triggered, current page:", page);
     const fetchMoreData = async () => {
-      if (query.trim() === "") return;
+      if (currentSearchQuery.trim() === "") return;
 
       setIsSearching(true);
       try {
-        console.log("Fetching page:", page, "for query:", query);
-        const data = await fetchBooks(query, "intitle", page, 10);
-        setBooks((prev) => [...prev, ...(data?.items || [])]);
-        setPage((prev) => prev + 1);
-        console.log("After load more, new page will be:", page + 1);
+        const data = await fetchBooks(currentSearchQuery, "intitle", page, 10);
 
-        if (data?.items) {
-          console.log("More books fetched:", data.items[0].volumeInfo.title);
-        }
+        const newBooks = data?.items || [];
+        const existingIds = new Set(books.map((book: any) => book.id));
+        const filteredNewBooks = newBooks.filter(
+          (book: any) => !existingIds.has(book.id)
+        );
+
+        setBooks((prev) => [...prev, ...filteredNewBooks]);
+        setPage((prev) => prev + 1);
       } catch (error) {
         console.error("Error fetching more books:", error);
       } finally {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
 import { BookProvider } from "../../components/BookProvider";
+import { fetchBooks } from "../../lib/fetchBooks";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -22,17 +23,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const data = await fetchBooks("harry", "intitle", 0, 10);
+
   return (
     <html lang="en">
       <body
         className={`${inter.variable} ${nunito.variable} antialiased h-screen`}
       >
-        <BookProvider>{children}</BookProvider>
+        <BookProvider initialBooks={data?.items || []}>{children}</BookProvider>
       </body>
     </html>
   );
