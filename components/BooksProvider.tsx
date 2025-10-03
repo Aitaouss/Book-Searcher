@@ -12,15 +12,21 @@ import { bookInterface } from "./BookProvider";
 import { useLocalStorage } from "../hooks/useLocallStorage";
 
 type BooksAction =
-  | { type: "ADD_BOOK"; payload: bookInterface }
-  | { type: "REMOVE_BOOK"; payload: string }; // payload is the book id
+  | { type: "ADD_FAV_BOOK"; payload: bookInterface }
+  | { type: "REMOVE_FAV_BOOK"; payload: string }
+  | { type: "ADD_QUEUE_BOOK"; payload: bookInterface }
+  | { type: "REMOVE_QUEUE_BOOK"; payload: string };
 
 interface BooksContextType {
   favBooks: bookInterface[];
+  queueBooks: bookInterface[];
   dispatch: React.Dispatch<BooksAction>;
   addBook: (book: bookInterface) => void;
   removeBook: (bookId: string) => void;
+  addQueueBook: (book: bookInterface) => void;
+  removeQueueBook: (bookId: string) => void;
   isBookFavorited: (bookId: string) => boolean;
+  isBookQueued: (bookId: string) => boolean;
 }
 
 function favBooksReducer(
@@ -28,13 +34,32 @@ function favBooksReducer(
   action: BooksAction
 ): bookInterface[] {
   switch (action.type) {
-    case "ADD_BOOK":
+    case "ADD_FAV_BOOK":
       if (state.some((book) => book.id === action.payload.id)) {
         return state;
       }
       return [...state, action.payload];
 
-    case "REMOVE_BOOK":
+    case "REMOVE_FAV_BOOK":
+      return state.filter((book) => book.id !== action.payload);
+
+    default:
+      return state;
+  }
+}
+
+function queueBooksReducer(
+  state: bookInterface[],
+  action: BooksAction
+): bookInterface[] {
+  switch (action.type) {
+    case "ADD_QUEUE_BOOK":
+      if (state.some((book) => book.id === action.payload.id)) {
+        return state;
+      }
+      return [...state, action.payload];
+
+    case "REMOVE_QUEUE_BOOK":
       return state.filter((book) => book.id !== action.payload);
 
     default:
@@ -60,7 +85,12 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     []
   );
 
-  const [favBooks, dispatch] = useReducer(favBooksReducer, []);
+  const [storedQueueBooks, setStoredQueueBooks] = useLocalStorage<
+    bookInterface[]
+  >("queue", []);
+
+  const [favBooks, favDispatch] = useReducer(favBooksReducer, []);
+  const [queueBooks, queueDispatch] = useReducer(queueBooksReducer, []);
 
   useEffect(() => {
     setIsClient(true);
@@ -69,10 +99,18 @@ export function BooksProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (isClient && storedFavBooks && storedFavBooks.length > 0) {
       storedFavBooks.forEach((book) => {
-        dispatch({ type: "ADD_BOOK", payload: book });
+        favDispatch({ type: "ADD_FAV_BOOK", payload: book });
       });
     }
   }, [isClient, storedFavBooks]);
+
+  useEffect(() => {
+    if (isClient && storedQueueBooks && storedQueueBooks.length > 0) {
+      storedQueueBooks.forEach((book) => {
+        queueDispatch({ type: "ADD_QUEUE_BOOK", payload: book });
+      });
+    }
+  }, [isClient, storedQueueBooks]);
 
   useEffect(() => {
     if (isClient) {
@@ -80,24 +118,46 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     }
   }, [favBooks, isClient, setStoredFavBooks]);
 
+  useEffect(() => {
+    if (isClient) {
+      setStoredQueueBooks(queueBooks);
+    }
+  }, [queueBooks, isClient, setStoredQueueBooks]);
+
   const addBook = (book: bookInterface) => {
-    dispatch({ type: "ADD_BOOK", payload: book });
+    favDispatch({ type: "ADD_FAV_BOOK", payload: book });
   };
 
   const removeBook = (bookId: string) => {
-    dispatch({ type: "REMOVE_BOOK", payload: bookId });
+    favDispatch({ type: "REMOVE_FAV_BOOK", payload: bookId });
+  };
+
+  const addQueueBook = (book: bookInterface) => {
+    queueDispatch({ type: "ADD_QUEUE_BOOK", payload: book });
+  };
+
+  const removeQueueBook = (bookId: string) => {
+    queueDispatch({ type: "REMOVE_QUEUE_BOOK", payload: bookId });
   };
 
   const isBookFavorited = (bookId: string): boolean => {
     return favBooks.some((book) => book.id === bookId);
   };
 
+  const isBookQueued = (bookId: string): boolean => {
+    return queueBooks.some((book) => book.id === bookId);
+  };
+
   const contextValue: BooksContextType = {
     favBooks,
-    dispatch,
+    queueBooks,
+    dispatch: favDispatch,
     addBook,
     removeBook,
+    addQueueBook,
+    removeQueueBook,
     isBookFavorited,
+    isBookQueued,
   };
 
   return (

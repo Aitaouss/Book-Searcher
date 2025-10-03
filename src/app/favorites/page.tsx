@@ -1,15 +1,27 @@
 "use client";
 
 import { useBooks } from "../../../components/BooksProvider";
+import { ConfirmationModal } from "../../../components/ConfirmationModal";
 import { FaBookDead, FaTrash, FaArrowLeft } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function FavoritesPage() {
   const { favBooks, removeBook } = useBooks();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState<string | null>(null);
 
   const handleRemoveFromFavorites = (bookId: string) => {
-    removeBook(bookId);
+    setBookToDelete(bookId);
+    setShowConfirmModal(true);
+  };
+
+  const confirmDelete = () => {
+    if (bookToDelete) {
+      removeBook(bookToDelete);
+      setBookToDelete(null);
+    }
   };
 
   return (
@@ -30,7 +42,7 @@ export default function FavoritesPage() {
             My Favorite Books
           </h1>
           <div className="flex items-center gap-2 text-foreground">
-            <FaTrash className="text-red-500" />
+            <FaTrash className="text-accent" />
             <span>{favBooks.length} books</span>
           </div>
         </div>
@@ -44,7 +56,7 @@ export default function FavoritesPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 w-full overflow-auto flex-1 bg-foreground/10 rounded-lg py-4">
+          <div className="grid grid-cols-1 gap-4 w-full overflow-auto flex-1 bg-foreground/10 rounded-lg py-4 custom-scrollbar">
             {favBooks.map((book) => (
               <div
                 key={book.id}
@@ -52,7 +64,7 @@ export default function FavoritesPage() {
               >
                 <div className="absolute right-4 top-4">
                   <button
-                    className="w-7 h-7 border bg-red-500 border-red-500 hover:bg-red-600 transition-all duration-300 rounded flex items-center justify-center cursor-pointer"
+                    className="w-7 h-7 border bg-accent border-accent hover:bg-accent/50 transition-all duration-300 rounded flex items-center justify-center cursor-pointer"
                     onClick={() => handleRemoveFromFavorites(book.id)}
                     title="Remove from favorites"
                   >
@@ -104,6 +116,21 @@ export default function FavoritesPage() {
           </div>
         )}
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        onClose={() => {
+          setShowConfirmModal(false);
+          setBookToDelete(null);
+        }}
+        onConfirm={confirmDelete}
+        title="Remove from Favorites"
+        message="Are you sure you want to remove this book from your favorites? This action cannot be undone."
+        confirmText="Remove"
+        cancelText="Cancel"
+        type="warning"
+      />
     </div>
   );
 }

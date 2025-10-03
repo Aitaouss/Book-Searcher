@@ -11,8 +11,14 @@ import { BookModal } from "./BookModal";
 export default function BookListClient() {
   const [selectedBook, setSelectedBook] = useState<bookInterface | null>(null);
 
-  // Use the new BooksProvider context
-  const { addBook, removeBook, isBookFavorited } = useBooks();
+  const {
+    addBook,
+    removeBook,
+    addQueueBook,
+    removeQueueBook,
+    isBookFavorited,
+    isBookQueued,
+  } = useBooks();
 
   const context = useContext(BookContext);
   if (!context) {
@@ -46,19 +52,16 @@ export default function BookListClient() {
     }
   };
 
-  // For now, we'll keep the queue functionality simple without the provider
   const handleCLickQueBook = (book: bookInterface) => {
-    // TODO: Implement queue functionality later
-    console.log("Queue clicked for book:", book.volumeInfo.title);
-  };
-
-  // Simple placeholder for queue functionality
-  const isBookQueued = (bookId: string): boolean => {
-    return false; // For now, no books are queued
+    if (isBookQueued(book.id)) {
+      removeQueueBook(book.id);
+    } else {
+      addQueueBook(book);
+    }
   };
 
   return (
-    <div className="mt-4 grid grid-cols-1 gap-4 w-full overflow-auto flex-1 bg-foreground/10 rounded-lg">
+    <div className="mt-4 grid grid-cols-1 gap-4 w-full overflow-auto flex-1 bg-foreground/10 rounded-lg custom-scrollbar">
       {booksToRender.map((book) => (
         <div
           key={book.id}
@@ -69,7 +72,7 @@ export default function BookListClient() {
             <button
               className={`w-7 h-7 border transition-all duration-300 rounded flex items-center justify-center cursor-pointer ${
                 isBookFavorited(book.id)
-                  ? "bg-red-500 border-red-500 hover:bg-red-600"
+                  ? "bg-accent border-accent hover:bg-red-600"
                   : "border-foreground hover:bg-foreground"
               }`}
               onClick={(e) => {
@@ -100,8 +103,17 @@ export default function BookListClient() {
                 e.stopPropagation();
                 handleCLickQueBook(book);
               }}
+              title={
+                isBookQueued(book.id) ? "Remove from queue" : "Add to queue"
+              }
             >
-              <FaList className="text-foreground m-1 hover:text-background" />
+              <FaList
+                className={`m-1 transition-colors duration-300 ${
+                  isBookQueued(book.id)
+                    ? "text-white"
+                    : "text-foreground hover:text-background"
+                }`}
+              />
             </button>
           </div>
           {book.volumeInfo.imageLinks?.thumbnail ? (
@@ -147,7 +159,7 @@ export default function BookListClient() {
       ))}
       <div className="w-full flex justify-center">
         <button
-          className="cursor-pointer font-medium bg-foreground w-[20%] py-2 text-background text-center mb-4 rounded"
+          className="cursor-pointer font-medium bg-foreground w-[20%] py-2 text-background text-center mb-4 rounded hover:bg-foreground/50 transition-all duration-300 hover:text-white"
           onClick={handleOnclickLoadMore}
         >
           Load more

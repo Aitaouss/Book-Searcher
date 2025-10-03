@@ -23,10 +23,9 @@ export default function SearchInbox() {
   const debouncedQuery = useDebounce<string>(query, 300);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-    setPage(0); // Reset page when query changes
+    setPage(0);
   };
 
-  // Effect for new searches (when query changes)
   useEffect(() => {
     if (refQuery.current) {
       refQuery.current = false;
@@ -63,7 +62,6 @@ export default function SearchInbox() {
     fetchData();
   }, [debouncedQuery]);
 
-  // Effect for load more (when loadMore flag changes)
   useEffect(() => {
     if (!loadMore) return;
 
@@ -96,11 +94,11 @@ export default function SearchInbox() {
       <input
         type="text"
         placeholder="Search..."
-        className=" p-2 border border-foreground rounded-md w-full"
+        className=" p-2 border border-foreground rounded-md w-full text-white"
         value={query}
         onChange={handleChange}
       />
-      <button className="bg-foreground p-2 text-background rounded w-auto cursor-pointer">
+      <button className="bg-foreground p-2 text-background rounded w-auto cursor-pointer hover:bg-foreground/50 transition-all duration-300 hover:text-white">
         {isSearching ? "..." : "Search"}
       </button>
     </div>
