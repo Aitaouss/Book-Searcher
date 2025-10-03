@@ -3,6 +3,7 @@ import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
 import { BookProvider } from "../../components/BookProvider";
 import { BooksProvider } from "../../components/BooksProvider";
+import { DndWrapper } from "../../components/DndWrapper";
 import { fetchBooks } from "../../lib/fetchBooks";
 
 const inter = Inter({
@@ -36,11 +37,13 @@ export default async function RootLayout({
       <body
         className={`${inter.variable} ${nunito.variable} antialiased h-screen`}
       >
-        <BooksProvider>
-          <BookProvider initialBooks={data?.items || []}>
-            {children}
-          </BookProvider>
-        </BooksProvider>
+        <DndWrapper>
+          <BooksProvider>
+            <BookProvider initialBooks={data?.items || []}>
+              {children}
+            </BookProvider>
+          </BooksProvider>
+        </DndWrapper>
       </body>
     </html>
   );

@@ -15,7 +15,15 @@ type BooksAction =
   | { type: "ADD_FAV_BOOK"; payload: bookInterface }
   | { type: "REMOVE_FAV_BOOK"; payload: string }
   | { type: "ADD_QUEUE_BOOK"; payload: bookInterface }
-  | { type: "REMOVE_QUEUE_BOOK"; payload: string };
+  | { type: "REMOVE_QUEUE_BOOK"; payload: string }
+  | {
+      type: "REORDER_FAV_BOOKS";
+      payload: { dragIndex: number; hoverIndex: number };
+    }
+  | {
+      type: "REORDER_QUEUE_BOOKS";
+      payload: { dragIndex: number; hoverIndex: number };
+    };
 
 interface BooksContextType {
   favBooks: bookInterface[];
@@ -25,6 +33,8 @@ interface BooksContextType {
   removeBook: (bookId: string) => void;
   addQueueBook: (book: bookInterface) => void;
   removeQueueBook: (bookId: string) => void;
+  reorderFavBooks: (dragIndex: number, hoverIndex: number) => void;
+  reorderQueueBooks: (dragIndex: number, hoverIndex: number) => void;
   isBookFavorited: (bookId: string) => boolean;
   isBookQueued: (bookId: string) => boolean;
 }
@@ -42,6 +52,12 @@ function favBooksReducer(
 
     case "REMOVE_FAV_BOOK":
       return state.filter((book) => book.id !== action.payload);
+
+    case "REORDER_FAV_BOOKS":
+      const newFavBooks = [...state];
+      const [draggedItem] = newFavBooks.splice(action.payload.dragIndex, 1);
+      newFavBooks.splice(action.payload.hoverIndex, 0, draggedItem);
+      return newFavBooks;
 
     default:
       return state;
@@ -61,6 +77,12 @@ function queueBooksReducer(
 
     case "REMOVE_QUEUE_BOOK":
       return state.filter((book) => book.id !== action.payload);
+
+    case "REORDER_QUEUE_BOOKS":
+      const newQueueBooks = [...state];
+      const [draggedItem] = newQueueBooks.splice(action.payload.dragIndex, 1);
+      newQueueBooks.splice(action.payload.hoverIndex, 0, draggedItem);
+      return newQueueBooks;
 
     default:
       return state;
@@ -140,6 +162,20 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     queueDispatch({ type: "REMOVE_QUEUE_BOOK", payload: bookId });
   };
 
+  const reorderFavBooks = (dragIndex: number, hoverIndex: number) => {
+    favDispatch({
+      type: "REORDER_FAV_BOOKS",
+      payload: { dragIndex, hoverIndex },
+    });
+  };
+
+  const reorderQueueBooks = (dragIndex: number, hoverIndex: number) => {
+    queueDispatch({
+      type: "REORDER_QUEUE_BOOKS",
+      payload: { dragIndex, hoverIndex },
+    });
+  };
+
   const isBookFavorited = (bookId: string): boolean => {
     return favBooks.some((book) => book.id === bookId);
   };
@@ -156,6 +192,8 @@ export function BooksProvider({ children }: { children: ReactNode }) {
     removeBook,
     addQueueBook,
     removeQueueBook,
+    reorderFavBooks,
+    reorderQueueBooks,
     isBookFavorited,
     isBookQueued,
   };

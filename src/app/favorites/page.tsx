@@ -2,13 +2,13 @@
 
 import { useBooks } from "../../../components/BooksProvider";
 import { ConfirmationModal } from "../../../components/ConfirmationModal";
+import { DraggableBookItem } from "../../../components/DraggableBookItem";
 import { FaBookDead, FaTrash, FaArrowLeft } from "react-icons/fa";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function FavoritesPage() {
-  const { favBooks, removeBook } = useBooks();
+  const { favBooks, removeBook, reorderFavBooks } = useBooks();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [bookToDelete, setBookToDelete] = useState<string | null>(null);
 
@@ -22,6 +22,10 @@ export default function FavoritesPage() {
       removeBook(bookToDelete);
       setBookToDelete(null);
     }
+  };
+
+  const handleMove = (dragIndex: number, hoverIndex: number) => {
+    reorderFavBooks(dragIndex, hoverIndex);
   };
 
   return (
@@ -57,61 +61,15 @@ export default function FavoritesPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 w-full overflow-auto flex-1 bg-foreground/10 rounded-lg py-4 custom-scrollbar">
-            {favBooks.map((book) => (
-              <div
+            {favBooks.map((book, index) => (
+              <DraggableBookItem
                 key={book.id}
-                className="border-t border-b p-4 shadow flex gap-4 relative bg-background/50 "
-              >
-                <div className="absolute right-4 top-4">
-                  <button
-                    className="w-7 h-7 border bg-accent border-accent hover:bg-accent/50 transition-all duration-300 rounded flex items-center justify-center cursor-pointer"
-                    onClick={() => handleRemoveFromFavorites(book.id)}
-                    title="Remove from favorites"
-                  >
-                    <FaTrash className="m-1 text-white transition-colors duration-300" />
-                  </button>
-                </div>
-
-                {book.volumeInfo.imageLinks?.thumbnail ? (
-                  <Image
-                    className="w-[80px] h-[120px] bg-red-300 rounded object-cover"
-                    src={book.volumeInfo.imageLinks?.thumbnail || ""}
-                    alt={book.volumeInfo.title}
-                    width={80}
-                    height={120}
-                    unoptimized
-                  />
-                ) : (
-                  <Image
-                    className="w-[80px] h-[120px] bg-red-300 rounded object-cover"
-                    src={"https://i.ibb.co/5gQxn3PS/image.png"}
-                    alt={book.volumeInfo.title}
-                    width={80}
-                    height={120}
-                    unoptimized
-                  />
-                )}
-
-                <div className="flex flex-col justify-between flex-1 pr-12">
-                  <h2 className="text-foreground text-lg font-bold">
-                    {book.volumeInfo.title && book.volumeInfo.title.length > 50
-                      ? book.volumeInfo.title.substring(0, 50) + "..."
-                      : book.volumeInfo.title}
-                  </h2>
-                  <p className="text-sm text-foreground">
-                    {book.volumeInfo.description
-                      ? book.volumeInfo.description.length > 100
-                        ? book.volumeInfo.description.substring(0, 100) + "..."
-                        : book.volumeInfo.description
-                      : "No description available."}
-                  </p>
-                  <p className="text-sm text-foreground mb-1 font-semibold">
-                    {book.volumeInfo.authors
-                      ? book.volumeInfo.authors.join(", ")
-                      : "N/A"}
-                  </p>
-                </div>
-              </div>
+                book={book}
+                index={index}
+                onRemove={handleRemoveFromFavorites}
+                onMove={handleMove}
+                type="favorite"
+              />
             ))}
           </div>
         )}
