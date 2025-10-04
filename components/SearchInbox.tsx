@@ -31,7 +31,6 @@ export default function SearchInbox() {
       refQuery.current = false;
       return;
     }
-    console.log("New search effect triggered");
     const fetchData = async () => {
       if (debouncedQuery.trim() === "") {
         setBooks([]);
@@ -43,12 +42,7 @@ export default function SearchInbox() {
         setBooks(data?.items || []);
         setCurrentSearchQuery(debouncedQuery);
         setPage(1);
-
-        if (data?.items) {
-          console.log("Books fetched:", data.items[0].volumeInfo.title);
-        }
         if (data.items?.length === 0) {
-          console.log("No books found");
           return;
         }
       } catch (error) {

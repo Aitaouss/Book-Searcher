@@ -22,17 +22,7 @@ Ever found yourself browsing for books online and struggling to keep track of wh
 3. **Organize**: Visit your favorites or queue pages and drag books around to reorder them
 4. **Manage**: Remove books you're no longer interested in with a simple click
 
-## Getting Started
-
-```bash
-# Install dependencies
-npm install
-
-# Run the development server
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) and start discovering your next great read!
+Open [https://book-searcher-hazel-five.vercel.app/](https://book-searcher-hazel-five.vercel.app/) and start discovering your next great read!
 
 ## Tech Stack
 
