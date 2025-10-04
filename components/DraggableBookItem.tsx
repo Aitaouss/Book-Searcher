@@ -101,19 +101,19 @@ export function DraggableBookItem({
       ref={ref}
       style={{ opacity }}
       data-handler-id={handlerId}
-      className={`border-t border-b p-4 shadow flex gap-4 relative bg-background/50 transition-all duration-200 ${
+      className={` border-t border-b p-4 shadow flex gap-4 relative bg-background/50 transition-all duration-200 ${
         isDragging ? "scale-105 shadow-lg" : ""
       }`}
     >
       {/* Drag Handle */}
       <div className="flex items-center justify-center cursor-grab active:cursor-grabbing">
-        <FaGripVertical className="text-foreground/40 hover:text-foreground/60" />
+        <FaGripVertical className="text-foreground/40 hover:text-foreground/60 text-sm sm:text-base" />
       </div>
 
       {/* Remove Button */}
-      <div className="absolute right-4 top-4">
+      <div className="absolute bottom-4 right-4 sm:right-4 sm:top-4">
         <button
-          className={`w-7 h-7 border ${accentColor} border-foreground ${hoverColor} transition-all duration-300 rounded flex items-center justify-center cursor-pointer`}
+          className={`w-5 h-5 sm:w-7 sm:h-7 border ${accentColor} border-foreground ${hoverColor} transition-all duration-300 rounded flex items-center justify-center cursor-pointer`}
           onClick={() => onRemove(book.id)}
           title={`Remove from ${type}s`}
         >
@@ -143,20 +143,20 @@ export function DraggableBookItem({
       )}
 
       {/* Book Details */}
-      <div className="flex flex-col justify-between flex-1 pr-12">
-        <h2 className="text-foreground text-lg font-bold">
+      <div className="flex flex-col justify-between gap-5 sm:gap-0 flex-1 pr-12 sm:pr-12">
+        <h2 className="text-foreground text-xs sm:text-sm lg:text-lg font-bold">
           {book.volumeInfo.title && book.volumeInfo.title.length > 50
             ? book.volumeInfo.title.substring(0, 50) + "..."
             : book.volumeInfo.title}
         </h2>
-        <p className="text-sm text-foreground">
+        <p className="text-[0.7rem] sm:text-sm text-foreground">
           {book.volumeInfo.description
             ? book.volumeInfo.description.length > 100
               ? book.volumeInfo.description.substring(0, 100) + "..."
               : book.volumeInfo.description
             : "No description available."}
         </p>
-        <p className="text-sm text-foreground mb-1 font-semibold">
+        <p className="text-[0.65rem] sm:text-sm text-foreground mb-1 font-semibold">
           {book.volumeInfo.authors ? book.volumeInfo.authors.join(", ") : "N/A"}
         </p>
       </div>

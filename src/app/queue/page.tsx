@@ -30,25 +30,27 @@ export default function QueuedPage() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center py-10 px-10">
-      <div className="w-[900px] flex h-full flex-col">
+    <div className="h-screen flex items-center justify-center py-4 sm:py-10 px-4 sm:px-10">
+      <div className="w-full max-w-[900px] flex h-full flex-col">
         {/* Header */}
-        <div className="w-full flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
+        <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4 sm:gap-0">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link
               href="/"
-              className="flex items-center gap-2 text-foreground hover:text-foreground/80 transition-colors"
+              className="flex items-center gap-1 sm:gap-2 text-foreground hover:text-foreground/80 transition-colors"
             >
-              <FaArrowLeft className="text-lg" />
-              <span>Back to Search</span>
+              <FaArrowLeft className="text-sm sm:text-lg" />
+              <span className="text-sm sm:text-base">Back to Search</span>
             </Link>
           </div>
-          <h1 className="text-foreground text-3xl font-bold">
+          <h1 className="text-foreground text-xl sm:text-2xl lg:text-3xl font-bold">
             My Reading Queue
           </h1>
           <div className="flex items-center gap-2 text-foreground">
-            <FaTrash className="text-accent" />
-            <span>{queueBooks.length} books</span>
+            <FaTrash className="text-accent text-sm sm:text-base" />
+            <span className="text-sm sm:text-base">
+              {queueBooks.length} books
+            </span>
           </div>
         </div>
 

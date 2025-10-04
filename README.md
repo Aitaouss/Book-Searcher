@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Book Searcher
+
+A simple and intuitive book management app that helps you discover, organize, and keep track of your reading journey.
+
+## What it does
+
+Ever found yourself browsing for books online and struggling to keep track of what you want to read? This app solves that problem! You can search for any book using the Google Books API, add them to your favorites, or queue them up for later reading.
+
+## Features
+
+- **🔍 Smart Search**: Find books instantly using Google's vast book database
+- **❤️ Favorites**: Save books you love and want to remember
+- **📋 Reading Queue**: Keep a list of books you plan to read next
+- **🎯 Drag & Drop**: Easily reorder your favorites and queue by dragging books around
+- **📱 Mobile Friendly**: Works great on your phone, tablet, or desktop
+- **💾 Auto-Save**: Your lists are automatically saved locally - no account needed!
+
+## How to use
+
+1. **Search**: Type any book title, author, or keyword in the search box
+2. **Add to Lists**: Click the heart (❤️) to add to favorites or the list icon (📋) to add to your queue
+3. **Organize**: Visit your favorites or queue pages and drag books around to reorder them
+4. **Manage**: Remove books you're no longer interested in with a simple click
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) and start discovering your next great read!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Built with modern web technologies for a smooth experience:
 
-## Learn More
+- **Next.js 14** - React framework with App Router
+- **TypeScript** - For better code reliability
+- **Tailwind CSS** - Beautiful, responsive styling
+- **React DnD** - Smooth drag-and-drop functionality
+- **Google Books API** - Comprehensive book database
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+_Happy reading! 📖_

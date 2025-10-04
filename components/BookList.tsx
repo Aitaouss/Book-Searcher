@@ -5,7 +5,6 @@ import { useContext } from "react";
 import { FaBookDead } from "react-icons/fa";
 import dynamic from "next/dynamic";
 
-// Dynamically import the client component with no SSR
 const BookListClient = dynamic(() => import("./BookListClient"), {
   ssr: false,
   loading: () => (
