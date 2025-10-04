@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import { bookInterface } from "./BookProvider";
+import { bookInterface } from "../providers/BookProvider";
 import Image from "next/image";
 
 export function BookModal({

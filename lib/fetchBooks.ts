@@ -23,7 +23,3 @@ export async function fetchBooks(
 
   return res.json();
 }
-
-// types : inauthor - intitle
-
-// Data : title, authors[0], description, imageLinks.thumbnail

@@ -1,11 +1,11 @@
 "use client";
 
-import { BookContext } from "./BookProvider";
-import { useBooks } from "./BooksProvider";
+import { BookContext } from "../providers/BookProvider";
+import { useBooks } from "../providers/BooksProvider";
 import { useContext, useState } from "react";
 import { FaBookDead, FaHeart, FaList } from "react-icons/fa";
 import Image from "next/image";
-import { bookInterface } from "./BookProvider";
+import { bookInterface } from "../providers/BookProvider";
 import { BookModal } from "./BookModal";
 
 export default function BookListClient() {

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Nunito } from "next/font/google";
 import "./globals.css";
-import { BookProvider } from "../../components/BookProvider";
-import { BooksProvider } from "../../components/BooksProvider";
-import { DndWrapper } from "../../components/DndWrapper";
+import { BookProvider } from "../../providers/BookProvider";
+import { BooksProvider } from "../../providers/BooksProvider";
+import { DndWrapper } from "../../providers/DndWrapper";
 import { fetchBooks } from "../../lib/fetchBooks";
 
 const inter = Inter({

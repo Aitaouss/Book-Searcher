@@ -1,11 +1,11 @@
 "use client";
 
-import { useBooks } from "../../../components/BooksProvider";
+import { useBooks } from "../../../providers/BooksProvider";
 import { ConfirmationModal } from "../../../components/ConfirmationModal";
 import { DraggableBookItem } from "../../../components/DraggableBookItem";
 import { FaBookDead, FaTrash, FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function FavoritesPage() {
   const { favBooks, removeBook, reorderFavBooks } = useBooks();

@@ -1,6 +1,6 @@
 "use client";
 
-import { BookContext } from "./BookProvider";
+import { BookContext } from "../providers/BookProvider";
 import { useContext } from "react";
 import { FaBookDead } from "react-icons/fa";
 import dynamic from "next/dynamic";

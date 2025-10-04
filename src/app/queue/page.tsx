@@ -1,6 +1,6 @@
 "use client";
 
-import { useBooks } from "../../../components/BooksProvider";
+import { useBooks } from "../../../providers/BooksProvider";
 import { ConfirmationModal } from "../../../components/ConfirmationModal";
 import { DraggableBookItem } from "../../../components/DraggableBookItem";
 import { FaBookDead, FaTrash, FaArrowLeft } from "react-icons/fa";

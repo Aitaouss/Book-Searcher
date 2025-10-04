@@ -3,7 +3,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { fetchBooks } from "../lib/fetchBooks";
 import { useDebounce } from "@uidotdev/usehooks";
-import { BookContext, bookInterface } from "./BookProvider";
+import { BookContext, bookInterface } from "../providers/BookProvider";
 
 export default function SearchInbox() {
   const [isSearching, setIsSearching] = useState<boolean>(false);
