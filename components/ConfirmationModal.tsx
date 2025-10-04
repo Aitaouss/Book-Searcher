@@ -1,6 +1,5 @@
 "use client";
 
-import { ReactNode } from "react";
 import { FaExclamationTriangle, FaTimes } from "react-icons/fa";
 
 interface ConfirmationModalProps {

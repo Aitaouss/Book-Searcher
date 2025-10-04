@@ -3,7 +3,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { fetchBooks } from "../lib/fetchBooks";
 import { useDebounce } from "@uidotdev/usehooks";
-import { BookContext } from "./BookProvider";
+import { BookContext, bookInterface } from "./BookProvider";
 
 export default function SearchInbox() {
   const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -73,9 +73,11 @@ export default function SearchInbox() {
         const data = await fetchBooks(currentSearchQuery, "intitle", page, 10);
 
         const newBooks = data?.items || [];
-        const existingIds = new Set(books.map((book: any) => book.id));
+        const existingIds = new Set(
+          books.map((book: bookInterface) => book.id)
+        );
         const filteredNewBooks = newBooks.filter(
-          (book: any) => !existingIds.has(book.id)
+          (book: bookInterface) => !existingIds.has(book.id)
         );
 
         setBooks((prev) => [...prev, ...filteredNewBooks]);

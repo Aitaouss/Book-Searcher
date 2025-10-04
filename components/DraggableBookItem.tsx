@@ -29,7 +29,7 @@ export function DraggableBookItem({
 }: DraggableBookItemProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: any }>({
+  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: string | symbol | null }>({
     accept: type,
     collect(monitor) {
       return {

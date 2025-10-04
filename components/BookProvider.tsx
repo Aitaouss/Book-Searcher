@@ -2,9 +2,24 @@
 
 import { createContext, useState, ReactNode } from "react";
 
+interface volumeInfoInterface {
+  title: string;
+  authors?: string[];
+  imageLinks?: {
+    smallThumbnail: string;
+    thumbnail: string;
+  };
+  description?: string;
+}
+
+export interface bookInterface {
+  id: string;
+  volumeInfo: volumeInfoInterface;
+}
+
 interface BookContextType {
-  books: any[];
-  setBooks: React.Dispatch<React.SetStateAction<any[]>>;
+  books: bookInterface[];
+  setBooks: React.Dispatch<React.SetStateAction<bookInterface[]>>;
   loadMore: boolean;
   setLoadMore: (loadMore: boolean) => void;
 }
@@ -12,18 +27,7 @@ interface BookContextType {
 export const BookContext = createContext<BookContextType | undefined>(
   undefined
 );
-export interface bookInterface {
-  id: string;
-  volumeInfo: {
-    title: string;
-    authors?: string[];
-    imageLinks?: {
-      smallThumbnail: string;
-      thumbnail: string;
-    };
-    description?: string;
-  };
-}
+
 export const BookProvider = ({
   children,
   initialBooks = [],
